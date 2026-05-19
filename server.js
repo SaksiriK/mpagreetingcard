@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+
 const GREETINGS_FILE = path.join(__dirname, 'greetings.json');
 const MAIN_MESSAGE_FILE = path.join(__dirname, 'main_message.txt');
 
