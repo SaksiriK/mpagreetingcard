@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recovery Message Board for Pornchai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+        }
+
+        .banner {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .recipient-image {
+            width: 20%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+            border-radius: 10px;
+        }
+
+        #main-message {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.8;
+            color: #333;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 30px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .messages-section {
+            padding: 20px;
+            border-top: 3px solid #667eea;
+        }
+
+        .messages-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        #messages-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .messages-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .messages-table thead {
+            background-color: #667eea;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        .messages-table th {
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .messages-table tbody tr {
+            height: 40px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .messages-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .messages-table tbody tr:hover {
+            background-color: #e8eaf6;
+        }
+
+        .messages-table td {
+            padding: 8px 12px;
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .messages-table td:first-child {
+            font-weight: bold;
+            color: #667eea;
+            width: 20%;
+        }
+
+        .messages-table td:nth-child(2) {
+            width: 60%;
+        }
+
+        .messages-table td:nth-child(3) {
+            font-size: 20px;
+            text-align: center;
+            width: 20%;
+        }
+
+        .messages-table td:nth-child(3) img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .no-messages {
+            text-align: center;
+            color: #999;
+            padding: 30px 20px;
+            font-style: italic;
+        }
+
+        .form-section {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .form-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .emoji-selector {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .emoji-btn {
+            padding: 10px;
+            font-size: 24px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .emoji-btn:hover {
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .emoji-btn.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="banner.jpg" alt="Recovery Banner" class="banner">
+            <img src="recipient.jpg" alt="Pornchai" class="recipient-image">
+            <div id="main-message">Loading message...</div>
+        </div>
+
+        <div class="messages-section">
+            <h2>Messages of Support</h2>
+            <div id="messages-container">
+                <table class="messages-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Message</th>
+                            <th>Emoji</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messagesBody"></tbody>
+                </table>
+            </div>
+
+            <div class="form-section">
+                <h3>Add Your Message</h3>
+                <form id="messageForm">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Emoji Options:</label>
+                        <input type="hidden" id="emoji" name="emoji" value="❤️">
+                        <div style="margin-bottom: 12px;">
+                            <div class="emoji-selector" id="emoji-selector"></div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <input type="text" id="emojiUrl" placeholder="Paste emoji image URL here" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 5px; font-size: 14px;">
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <input type="file" id="emojiUpload" accept="image/*" style="width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 5px;">
+                        </div>
+                        <div id="emojiUploadPreview" style="text-align: center; min-height: 40px; display: flex; align-items: center; justify-content: center;"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const emojis = ['❤️', '💪', '😊', '🙏', '✨', '🌟', '💚', '🎉'];
+
+        function initializeEmojiSelector() {
+            console.log('⚙️  initializeEmojiSelector: Starting...');
+            const selector = document.getElementById('emoji-selector');
+            emojis.forEach(emoji => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'emoji-btn';
+                btn.textContent = emoji;
+                btn.onclick = () => {
+                    console.log('📌 Emoji selected:', emoji);
+                    document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    document.getElementById('emoji').value = emoji;
+                    
+                    // Clear other options
+                    document.getElementById('emojiUrl').value = '';
+                    document.getElementById('emojiUpload').value = '';
+                    sessionStorage.removeItem('emojiUrl');
+                    sessionStorage.removeItem('uploadedEmoji');
+                    document.getElementById('emojiUploadPreview').innerHTML = '';
+                };
+                selector.appendChild(btn);
+            });
+            document.querySelectorAll('.emoji-btn')[0].classList.add('selected');
+            console.log('✅ initializeEmojiSelector: Complete');
+        }
+
+        async function loadMainMessage() {
+            try {
+                console.log('🔄 loadMainMessage: Starting fetch...');
+                const response = await fetch('/api/main-message');
+                console.log('📥 loadMainMessage: Response received, status:', response.status);
+                const text = await response.text();
+                console.log('📝 loadMainMessage: Text received, length:', text.length);
+                document.getElementById('main-message').innerHTML = text;
+                console.log('✅ loadMainMessage: Displayed on page');
+            } catch (error) {
+                console.error('❌ loadMainMessage: Error:', error);
+                document.getElementById('main-message').innerHTML = 'Error loading message';
+            }
+        }
+
+        async function loadGreetings() {
+            try {
+                console.log('🔄 loadGreetings: Starting fetch...');
+                const response = await fetch('/api/greetings');
+                console.log('📥 loadGreetings: Response received, status:', response.status);
+                const data = await response.json();
+                console.log('📊 loadGreetings: JSON parsed, data:', data);
+                displayMessages(data);
+            } catch (error) {
+                console.error('❌ loadGreetings: Error:', error);
+            }
+        }
+
+        function displayMessages(messages) {
+            console.log('🎨 displayMessages: Starting...');
+            const messagesBody = document.getElementById('messagesBody');
+            messagesBody.innerHTML = '';
+
+            if (!messages || messages.length === 0) {
+                console.log('⚠️  displayMessages: No messages found');
+                const emptyRow = document.createElement('tr');
+                emptyRow.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">No messages yet. Be the first to add one!</td>';
+                messagesBody.appendChild(emptyRow);
+                return;
+            }
+
+            console.log('🎨 displayMessages: Found', messages.length, 'messages');
+            
+            // Sort messages by created_at, newest first
+            const sortedMessages = [...messages].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            sortedMessages.forEach((msg, index) => {
+                console.log(`  📌 Processing message [${index}]:`, msg.name);
+                const row = document.createElement('tr');
+                
+                // Determine if emoji is a URL (image) or text
+                let emojiCell = msg.emoji;
+                if (msg.emoji && (msg.emoji.startsWith('http://') || msg.emoji.startsWith('https://') || msg.emoji.startsWith('data:'))) {
+                    emojiCell = `<img src="${msg.emoji}" style="width: 32px; height: 32px; border-radius: 4px;">`;
+                }
+                
+                row.innerHTML = `
+                    <td>${msg.name}</td>
+                    <td>${msg.message}</td>
+                    <td>${emojiCell}</td>
+                `;
+                messagesBody.appendChild(row);
+            });
+            console.log('✅ displayMessages: Complete');
+        }
+
+        // Handle emoji URL input
+        document.getElementById('emojiUrl').addEventListener('input', function(e) {
+            const url = e.target.value.trim();
+            if (url) {
+                console.log('🔗 emojiUrl: URL entered:', url);
+                sessionStorage.setItem('emojiUrl', url);
+                
+                // Clear other options
+                document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+                document.getElementById('emojiUpload').value = '';
+                document.getElementById('emoji').value = '';
+                sessionStorage.removeItem('uploadedEmoji');
+                
+                // Show preview
+                document.getElementById('emojiUploadPreview').innerHTML = '<img src="' + url + '" style="width: 32px; height: 32px; border: 2px solid #667eea; border-radius: 5px;" onerror="this.style.display=\'none\';">';
+                console.log('✅ emojiUrl: Preview updated');
+            } else {
+                sessionStorage.removeItem('emojiUrl');
+                document.getElementById('emojiUploadPreview').innerHTML = '';
+            }
+        });
+        
+        // Handle emoji file upload
+        document.getElementById('emojiUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                console.log('📸 emojiUpload: File selected:', file.name);
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        console.log('📸 emojiUpload: Image loaded, resizing...');
+                        // Create canvas and resize to 32x32
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 32;
+                        canvas.height = 32;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, 32, 32);
+                        const resizedImage = canvas.toDataURL('image/png');
+                        
+                        // Store in sessionStorage and display preview
+                        sessionStorage.setItem('uploadedEmoji', resizedImage);
+                        document.getElementById('emojiUploadPreview').innerHTML = '<img src="' + resizedImage + '" style="width: 32px; height: 32px; border: 2px solid #667eea; border-radius: 5px;">';
+                        
+                        // Clear other options
+                        document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+                        document.getElementById('emojiUrl').value = '';
+                        document.getElementById('emoji').value = '';
+                        sessionStorage.removeItem('emojiUrl');
+                        
+                        console.log('✅ emojiUpload: Image resized to 32x32 and stored');
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function submitMessage(e) {
+            e.preventDefault();
+            console.log('📤 submitMessage: Form submitted');
+            
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+            
+            // Priority: uploaded file > URL > preset emoji > default
+            let emoji = sessionStorage.getItem('uploadedEmoji') || 
+                       sessionStorage.getItem('emojiUrl') || 
+                       document.getElementById('emoji').value || 
+                       '❤️';
+            
+            console.log('📤 submitMessage: Data -', {name, message, emoji});
+
+            try {
+                console.log('📤 submitMessage: Sending POST request...');
+                const response = await fetch('/api/greetings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, message, emoji })
+                });
+                
+                console.log('📥 submitMessage: Response status:', response.status);
+                const result = await response.json();
+                
+                if (response.ok) {
+                    console.log('✅ submitMessage: Message posted successfully');
+                    document.getElementById('messageForm').reset();
+                    
+                    // Clear emoji storage
+                    sessionStorage.removeItem('uploadedEmoji');
+                    sessionStorage.removeItem('emojiUrl');
+                    document.getElementById('emojiUpload').value = '';
+                    document.getElementById('emojiUrl').value = '';
+                    document.getElementById('emojiUploadPreview').innerHTML = '';
+                    
+                    // Reset to first preset emoji
+                    document.querySelectorAll('.emoji-btn').forEach((b, i) => {
+                        if (i === 0) b.classList.add('selected');
+                        else b.classList.remove('selected');
+                    });
+                    document.getElementById('emoji').value = emojis[0];
+                    
+                    // Add new message to top of table
+                    const messagesBody = document.getElementById('messagesBody');
+                    const newRow = document.createElement('tr');
+                    
+                    // Determine if emoji is a URL (image) or text
+                    let emojiCell = emoji;
+                    if (emoji.startsWith('http://') || emoji.startsWith('https://') || emoji.startsWith('data:')) {
+                        emojiCell = `<img src="${emoji}" style="width: 32px; height: 32px; border-radius: 4px;">`;
+                    }
+                    
+                    newRow.innerHTML = `
+                        <td>${name}</td>
+                        <td>${message}</td>
+                        <td>${emojiCell}</td>
+                    `;
+                    
+                    // Remove "no messages" row if present
+                    if (messagesBody.rows.length === 1 && messagesBody.rows[0].cells[0].colSpan === 3) {
+                        messagesBody.innerHTML = '';
+                    }
+                    
+                    messagesBody.insertBefore(newRow, messagesBody.firstChild);
+                    console.log('✅ submitMessage: New message added to top');
+                } else {
+                    console.error('❌ submitMessage: Server error:', result.error);
+                    alert('Error posting message: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('❌ submitMessage: Error:', error);
+                alert('Error posting message. Check console for details.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌍 DOMContentLoaded: Initializing...');
+            initializeEmojiSelector();
+            loadMainMessage();
+            loadGreetings();
+            document.getElementById('messageForm').addEventListener('submit', submitMessage);
+            console.log('🌍 DOMContentLoaded: Complete');
+        });
+    </script>
+</body>
+</html>
